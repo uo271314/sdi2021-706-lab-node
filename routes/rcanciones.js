@@ -1,4 +1,4 @@
-module.exports = function(app, swig) {
+module.exports = function(app, swig, gestorBD) {
     app.get("/nuevas/canciones", function(req, res) {
         let canciones = [{
             "nombre": "Blank space",
@@ -41,8 +41,27 @@ module.exports = function(app, swig) {
     });
 
     app.post("/cancion", function(req, res){
-       res.send("Canción agregada: " + req.body.nombre + "<br>"
-            + " Género: " + req.body.genero + "<br>"
-            + " Precio: " + req.body.precio);
+        let cancion = {
+            nombre : req.body.nombre,
+            genero : req.body.genero,
+            precio : req.body.precio
+        }
+        // Conectarse
+        gestorBD.insertarCancion(cancion, function(id){
+            if (id == null) {
+                res.send("Error al insertar canción");
+            } else {
+               /* if (req.files.portada != null) {
+                    var imagen = req.files.portada;
+                    imagen.mv('public/portadas/' + id + '.png', function(err) {
+                        if (err) {
+                            res.send("Error al subir la portada");
+                        } else {*/
+                            res.send("Agregada id: " + id);
+                        /*}
+                    });
+                }*/
+            }
+        });
     });
 };
