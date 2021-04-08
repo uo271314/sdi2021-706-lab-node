@@ -2,8 +2,10 @@ module.exports = function(app, swig, mcomentarios) {
     app.post('/comentarios/:cancion_id', function (req,res) {
         let cancion_id = mcomentarios.mongo.ObjectId(req.params.cancion_id);
         let autor = req.session.usuario;
-        if (autor == null)
-            autor = "Usuario no registrado";
+        if (autor == null) {
+            res.send("Error: no puedes comentar si no estás registrado");
+            return;
+        }
 
         let comentario = {
             autor: autor,
