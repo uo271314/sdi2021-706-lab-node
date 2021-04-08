@@ -54,4 +54,46 @@
 			  </div>
 		  </div>
 	  </div>
+
+	<br/><br/><br/>
+	<div id="comentarios">
+		<div>
+			<form method="post" action="/comentarios/{{ cancion._id.toString() }}" >
+				<div>
+					<label class="control-label col-sm-2" >Comentar: </label>
+					<div class="col-sm-8">
+					<input type="text" class="search-query form-control"
+						   placeholder="Comenta la canción" name="texto"/>
+					</div>
+					<span class="input-group-btn">
+						<button class="btn" type="submit">Comentar</button>
+					</span>
+				</div>
+			</form>
+		</div>
+		<br/><br/>
+		<div id="vistaComentarios">
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th>Comentario</th>
+					<th>Autor</th>
+					<th></th>
+					<th class="col-md-1"></th>
+					<th class="col-md-1"></th>
+					<th class="col-md-1"></th>
+				</tr>
+				</thead>
+				<tbody>
+				{% for comentario in comentarios %}
+				<tr>
+					<td>{{ comentario.texto }}</td>
+					<td>{{ comentario.autor }}</td>
+					<td><a>Eliminar</a></td>
+				</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 {% endblock %}

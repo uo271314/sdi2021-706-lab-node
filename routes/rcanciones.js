@@ -1,4 +1,4 @@
-module.exports = function(app, swig, gestorBD) {
+module.exports = function(app, swig, gestorBD, mcomentarios) {
     app.get("/nuevas/canciones", function(req, res) {
         let canciones = [{
             "nombre": "Blank space",
@@ -106,14 +106,25 @@ module.exports = function(app, swig, gestorBD) {
     app.get('/cancion/:id', function (req, res) {
         let criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
         gestorBD.obtenerCanciones(criterio,function(canciones){
+            let respuesta = swig.renderFile('views/bcancion.html', {});
             if ( canciones == null ){
-                res.send("Error al recuperar la canción.");
-            } else {
-                let respuesta = swig.renderFile('views/bcancion.html',
-                    {
-                        cancion : canciones[0]
-                    });
                 res.send(respuesta);
+            } else {
+                let criterioComentario = {"cancion_id": gestorBD.mongo.ObjectID(req.params.id)};
+
+                respuesta = swig.renderFile('views/bcancion.html', { cancion : canciones[0]});
+                mcomentarios.obtenerComentarios(criterioComentario,function(comentarios){
+                    if (comentarios == null)
+                        res.send(respuesta);
+                    else{
+                        respuesta = swig.renderFile('views/bcancion.html',
+                            {
+                                cancion : canciones[0],
+                                comentarios : comentarios
+                            });
+                        res.send(respuesta);
+                    }
+                });
             }
         });
     });

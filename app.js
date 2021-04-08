@@ -22,6 +22,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 let gestorBD = require("./modules/gestorBD.js");
 gestorBD.init(app,mongo);
+let mcomentarios = require("./modules/mcomentarios.js");
+mcomentarios.init(app,mongo);
 
 // routerUsuarioSession
 var routerUsuarioSession = express.Router();
@@ -66,8 +68,9 @@ app.set('crypto',crypto);
 
 //Rutas/controladores por lógica
 require("./routes/rusuarios.js")(app, swig, gestorBD); // (app, param1, param2, etc.)
-require("./routes/rcanciones.js")(app, swig, gestorBD); // (app, param1, param2, etc.)
+require("./routes/rcanciones.js")(app, swig, gestorBD, mcomentarios); // (app, param1, param2, etc.)
 require("./routes/rautores.js")(app, swig); // (app, param1, param2, etc.)
+require("./routes/rcomentarios.js")(app, swig, mcomentarios);
 
 
 // Lanzar el servidor
