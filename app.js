@@ -94,6 +94,9 @@ require("./routes/rcanciones.js")(app, swig, gestorBD, mcomentarios); // (app, p
 require("./routes/rautores.js")(app, swig); // (app, param1, param2, etc.)
 require("./routes/rcomentarios.js")(app, swig, mcomentarios);
 
+app.get('/', function (req, res) {
+   res.redirect('/tienda');
+})
 
 // Lanzar el servidor
 app.listen(app.get('port'), function() {
