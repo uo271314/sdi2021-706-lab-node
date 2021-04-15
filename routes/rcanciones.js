@@ -64,7 +64,7 @@ module.exports = function(app, swig, gestorBD, mcomentarios) {
                     var imagen = req.files.portada;
                     imagen.mv('public/portadas/' + id + '.png', function(err) {
                         if (err) {
-                            res.send("Error al subir la portada");
+                           res.send("Error al subir la portada");
                         } else {
                 if (req.files.audio != null) {
                     let audio = req.files.audio;
