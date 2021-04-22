@@ -15,7 +15,7 @@ module.exports = function(app, gestorBD) {
     });
 
     app.get("/api/cancion/:id", function(req, res) {
-        let criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id)}
+        let criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id)};
 
         gestorBD.obtenerCanciones(criterio,function(canciones){
             if ( canciones == null ){
@@ -31,7 +31,7 @@ module.exports = function(app, gestorBD) {
     });
 
     app.delete("/api/cancion/:id", function(req, res) {
-        let criterio = {"_id": gestorBD.mongo.ObjectID(req.params.id)}
+        let criterio = {"_id": gestorBD.mongo.ObjectID(req.params.id)};
         let cancion_id = gestorBD.mongo.ObjectID(req.params.id);
         let usuario = res.usuario;
         var errors = new Array();
@@ -221,7 +221,16 @@ module.exports = function(app, gestorBD) {
 
     function validadorActualizarCancion(usuario, functionCallback){
         let errors = new Array();
-
+        if (cancion.nombre === null || typeof cancion.nombre === 'undefined' || cancion.nombre === "")
+            errors.push("El nombre de la canción no puede estar vacío.");
+        if (cancion.nombre.length < 2 || cancion.nombre.length > 10)
+            errors.push("El nombre de la canción debe tener entre (2-10) caracteres.")
+        if (cancion.genero === null || typeof cancion.genero === 'undefined' || cancion.genero === "")
+            errors.push("El género de la canción no puede estar vacío.")
+        if (cancion.precio === null || typeof cancion.precio === 'undefined' || cancion.genero === "")
+            errors.push("El precio de la canción no puede estar vacío.");
+        if (cancion.precio < 0)
+            errors.push("El precio de la canción no puede ser negativo.");
 
         if (errors.length <= 0)
             functionCallback(null);
@@ -230,8 +239,10 @@ module.exports = function(app, gestorBD) {
     }
 
     function usuarioEsAutor(usuario, cancionId, functionCallback){
-        gestorBD.obtenerCanciones(usuario,function(canciones){
-           if (canciones.contains(cancionId))
+
+        let criterio = { "_id" : cancionId };
+        gestorBD.obtenerCanciones(criterio,function(canciones){
+           if (canciones[0].autor === usuario)
                functionCallback(true);
            else
                functionCallback(false);
